@@ -8,7 +8,8 @@ import base64
 import os
 import re
 
-app = Flask(__name__)
+a
+pp = Flask(__name__)
 
 # Configuration
 class Config:
@@ -106,11 +107,18 @@ class PayPalAPI:
     def get_access_token():
         """Get PayPal access token"""
         url = f"https://api-m.{'sandbox.' if app.config['PAYPAL_ENVIRONMENT'] == 'sandbox' else ''}paypal.com/v1/oauth2/token"
-        
-        headers = {
-            'Accept': 'application/json',
-            'Accept-Language': 'en_US',
-            'Authorization': f'Basic {base64.b64encode(f"{app.config["PAYPAL_CLIENT_ID"]}:{app.config["PAYPAL_CLIENT_SECRET"]}".encode()).decode()}'
+# This should be part of your PayPal access token function or request logic
+client_id = app.config['PAYPAL_CLIENT_ID']
+client_secret = app.config['PAYPAL_CLIENT_SECRET']
+auth_str = f"{client_id}:{client_secret}"
+auth_b64 = base64.b64encode(auth_str.encode()).decode()
+
+headers = {
+    'Accept': 'application/json',
+    'Accept-Language': 'en_US',
+    'Authorization': f'Basic {auth_b64}'
+}
+
         }
         
         data = 'grant_type=client_credentials'
@@ -284,7 +292,7 @@ class Subscription(db.Model):
 
 # Routes and logic here...
 
-def get_paypal_access_token():
++def get_paypal_access_token():
     auth = base64.b64encode(
         f"{app.config['PAYPAL_CLIENT_ID']}:{app.config['PAYPAL_CLIENT_SECRET']}".encode()
     ).decode()
