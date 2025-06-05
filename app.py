@@ -232,15 +232,15 @@ db = SQLAlchemy(app)
 jwt = JWTManager(app)
 
 # Database Models
-class User(db.Model):
+
+    # class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     is_verified = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-
-    # Relationship with subscriptions
+Relationship with subscriptions
     subscriptions = db.relationship('Subscription', backref='user', lazy=True)
 
     def set_password(self, password):
