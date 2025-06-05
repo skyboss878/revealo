@@ -1,3 +1,5 @@
+from dot.env import load_dotenv import os
+# load enviorment variables from .env file load_dotenv()
 from flask import Flask, request, jsonify, render_template_string
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
