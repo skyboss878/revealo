@@ -32,7 +32,7 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
 
-# Database Models
+
 # Database Models
 class Subscription(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -54,19 +54,7 @@ class Subscription(db.Model):
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "updated_at": self.updated_at.isoformat() if self.updated_at else None,
             "next_billing_time": self.next_billing_time.isoformat() if self.next_billing_time else None
-        }
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "user_id": self.user_id,
-            "paypal_subscription_id": self.paypal_subscription_id,
-            "plan_id": self.plan_id,
-            "status": self.status,
-            "created_at": self.created_at.isoformat() if self.created_at else None,
-            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
-            "next_billing_time": self.next_billing_time.isoformat() if self.next_billing_time else None
-        }
-    
+        }    
     # Relationship with subscriptions
     subscriptions = db.relationship('Subscription', backref='user', lazy=True)
     
