@@ -33,13 +33,27 @@ db = SQLAlchemy(app)
 jwt = JWTManager(app)
 
 # Database Models
-class User(db.Model):
+class Subscription(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(255), nullable=False)
-    is_verified = db.Column(db.Boolean, default=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    paypal_subscription_id = db.Column(db.String(50), unique=True, nullable=False)
+    plan_id = db.Column(db.String(50), nullable=False)
+    status = db.Column(db.String(20), nullable=False, default='PENDING')  # PENDING, ACTIVE, CANCELLED, SUSPENDED
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    next_billing_time = db.Column(db.DateTime)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "paypal_subscription_id": self.paypal_subscription_id,
+            "plan_id": self.plan_id,
+            "status": self.status,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+            "next_billing_time": self.next_billing_time.isoformat() if self.next_billing_time else None
+        }
     
     # Relationship with subscriptions
     subscriptions = db.relationship('Subscription', backref='user', lazy=True)
