@@ -33,6 +33,7 @@ db = SQLAlchemy(app)
 jwt = JWTManager(app)
 
 # Database Models
+# Database Models
 class Subscription(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -43,6 +44,17 @@ class Subscription(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     next_billing_time = db.Column(db.DateTime)
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "paypal_subscription_id": self.paypal_subscription_id,
+            "plan_id": self.plan_id,
+            "status": self.status,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+            "next_billing_time": self.next_billing_time.isoformat() if self.next_billing_time else None
+        }
     def to_dict(self):
         return {
             "id": self.id,
