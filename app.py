@@ -392,6 +392,26 @@ def invalid_token_callback(error):
 def missing_token_callback(error):
     return jsonify({'error': 'Authentication token required'}), 401
 
+def get_paypal_access_token():
+    auth = base64.b64encode(
+
+    ).decode()
+
+    headers = {
+        "Authorization": f"Basic {auth}",
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+
+    url = "https://api-m.paypal.com/v1/oauth2/token" if app.config['PAYPAL_ENVIRONMENT'] == "live" else "https://api-m.sandbox.paypal.com/v1/oauth2/token"
+
+    response = requests.post(url, headers=headers, data={"grant_type": "client_credentials"})
+
+    if response.status_code == 200:
+        return response.json().get("access_token")
+    else:
+        print("Failed to get PayPal access token:", response.text)
+        return None
+
 # Initialize database
 @app.before_first_request
 def create_tables():
