@@ -1,4 +1,5 @@
-from dot.env import load_dotenv import os
+from dotenv import load_dotenv
+import os
 # load enviorment variables from .env file load_dotenv()
 from flask import Flask, request, jsonify, render_template_string
 from flask_sqlalchemy import SQLAlchemy
